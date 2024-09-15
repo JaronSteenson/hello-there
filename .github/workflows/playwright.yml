@@ -5,7 +5,7 @@ on:
   pull_request:
     branches: [ master ]
   schedule:
-    - cron: "3 12 * * Sun"
+    - cron: "3 * * * Mon"
 jobs:
   book-court:
     env:
