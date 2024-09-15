@@ -1,5 +1,10 @@
 import { test } from '@playwright/test';
 
+
+/**
+ * `0 12 * * 7` At 12:00 PM, only on Sunday.
+ * Accounting for timezones and assuming we are running in utc, means 12am Monday night NZ time.
+ */
 test('book court', async ({ page }) => {
   // Login
   await page.goto('/login/credentials');
@@ -7,7 +12,7 @@ test('book court', async ({ page }) => {
   await page.getByPlaceholder('Password').fill(process.env.PASSWORD);
   await page.locator('[type=submit]').click();
 
-  // Book
+  // Wait for logged in app state and go to bookings page.
   await page.locator('[href="/bookings"]').last().click();
 
   // Cycle through days, till the next instance of our booking day is found.
