@@ -5,8 +5,8 @@ on:
   pull_request:
     branches: [ master ]
   schedule:
-    # 7pm Sunday UTC = 7am Monday NZST (look ahead seems to be 7am)
-    - cron: "0 19 * * Sun"
+    # 2pm Sunday UTC = 2am Monday NZST (look ahead seems to be 2am)
+    - cron: "0 14 * * Sun"
 jobs:
   book-court:
     env:

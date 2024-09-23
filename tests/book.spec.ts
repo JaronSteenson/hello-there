@@ -35,6 +35,9 @@ async function login({ page }) {
 }
 
 async function findBookingDay({ page }) {
+  // Click to the next day immediately so we don't try to book for today.
+  await page.locator('.BookingGridNav button').last().click(); // Next day button.
+
   // Cycle through days, till the next instance of our booking day is found.
   let foundDay = false
   let previousDate = ''
