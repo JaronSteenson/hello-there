@@ -16,6 +16,7 @@ test('book court', async ({ page }) => {
     endTime: process.env.BOOKING_TIME_END,
     uncheckConfirmationEmail: false
   });
+
   await bookSlots({
     page,
     startTime:
@@ -58,8 +59,14 @@ async function findBookingDay({ page }) {
 }
 
 async function bookSlots({ page, startTime, endTime, uncheckConfirmationEmail }) {
-  await page.getByText(startTime).nth(process.env.BOOKING_COURT - 1).click();
-  await page.getByText(endTime).nth(process.env.BOOKING_COURT - 1).click();
+  const courtColumn = process.env.BOOKING_COURT - 1;
+
+  await page.locator('.BookingGrid').last().locator('.BookingGrid-column').nth(courtColumn).getByText(startTime).scrollIntoViewIfNeeded();
+  await page.locator('.BookingGrid').last().locator('.BookingGrid-column').nth(courtColumn).getByText(startTime).click();
+
+  if (startTime !== endTime) {
+    await page.locator('.BookingGrid').last().locator('.BookingGrid-column').nth(courtColumn).getByText(endTime).click();
+  }
 
   await page.getByText('Practice').click();
   await page.getByText('Next').click();
@@ -82,4 +89,9 @@ async function bookSlots({ page, startTime, endTime, uncheckConfirmationEmail })
 function pause() {
   console.log('Pausing');
   return new Promise(() => {});
+}
+
+function delay(ms) {
+  console.log('Delaying', ms);
+  return new Promise(resolve => setTimeout(resolve, ms))
 }
