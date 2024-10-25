@@ -64,9 +64,10 @@ async function bookSlots({ page, startTime, endTime, uncheckConfirmationEmail })
   await page.locator('.BookingGrid').last().locator('.BookingGrid-column').nth(courtColumn).getByText(startTime).scrollIntoViewIfNeeded();
   await page.locator('.BookingGrid').last().locator('.BookingGrid-column').nth(courtColumn).getByText(startTime).click();
 
-  if (startTime !== endTime) {
-    await page.locator('.BookingGrid').last().locator('.BookingGrid-column').nth(courtColumn).getByText(endTime).click();
+  if (startTime === endTime) {
+    await delay(1000); // Add a delay so it can process the click twice.
   }
+  await page.locator('.BookingGrid').last().locator('.BookingGrid-column').nth(courtColumn).getByText(endTime).click();
 
   await page.getByText('Practice').click();
   await page.getByText('Next').click();
