@@ -6,7 +6,7 @@ on:
     branches: [ master ]
   schedule:
     # 2pm Sunday UTC = 2am Monday NZST (look ahead seems to be 2am)
-    - cron: "0 * * * Sun"
+    - cron: "0 12-17 * * Tue"
 jobs:
   book-court:
     env:

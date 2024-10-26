@@ -11,22 +11,24 @@ test('book court', async ({ page }) => {
 
   await bookSlots({
     page,
-    startTime:
-    process.env.BOOKING_TIME_START,
+    startTime: process.env.BOOKING_TIME_START,
     endTime: process.env.BOOKING_TIME_END,
-    uncheckConfirmationEmail: false
   });
+
+  await wait(1000);
 
   await bookSlots({
     page,
-    startTime:
-    process.env.BOOKING_TIME_START_2,
+    startTime: process.env.BOOKING_TIME_START_2,
     endTime: process.env.BOOKING_TIME_END_2,
-    uncheckConfirmationEmail: true
+    uncheckConfirmationEmail: true,
+    singleClickBooking: true,
   });
 });
 
 async function login({ page }) {
+  console.log('Logging in', process.env.USERNAME);
+
   await page.goto('/login/credentials');
   await page.getByPlaceholder('Username').fill(process.env.USERNAME);
   await page.getByPlaceholder('Password').fill(process.env.PASSWORD);
@@ -36,6 +38,8 @@ async function login({ page }) {
 }
 
 async function findBookingDay({ page }) {
+  console.log('Finding booking day', process.env.BOOKING_DAY);
+
   // Click to the next day immediately so we don't try to book for today.
   await page.locator('.BookingGridNav button').last().click(); // Next day button.
 
@@ -58,17 +62,26 @@ async function findBookingDay({ page }) {
   }
 }
 
-async function bookSlots({ page, startTime, endTime, uncheckConfirmationEmail }) {
+async function bookSlots({ page, startTime, endTime, uncheckConfirmationEmail = false, singleClickBooking = false }) {
+  console.log('Booking slot', startTime, endTime);
   const courtColumn = process.env.BOOKING_COURT - 1;
 
-  await page.locator('.BookingGrid').last().locator('.BookingGrid-column').nth(courtColumn).getByText(startTime).scrollIntoViewIfNeeded();
-  await page.locator('.BookingGrid').last().locator('.BookingGrid-column').nth(courtColumn).getByText(startTime).click();
+  const start = page.locator('.BookingGrid').last().locator('.BookingGrid-column').nth(courtColumn).getByText(startTime);
+  await start.scrollIntoViewIfNeeded();
+  await start.click();
+  console.log('Start time clicked', startTime);
 
-  if (startTime === endTime) {
-    await delay(1000); // Add a delay so it can process the click twice.
+  if (singleClickBooking) {
+    // I think back to back bookings in peak hits the total time limit and causes the booking form to open on start time click.
+    console.log('Skipping end time click, single click booking');
+  } else {
+    const end = page.locator('.BookingGrid').last().locator('.BookingGrid-column').nth(courtColumn).getByText(endTime);
+    await end.scrollIntoViewIfNeeded();
+    await end.click();
+    console.log('End time clicked', endTime);
   }
-  await page.locator('.BookingGrid').last().locator('.BookingGrid-column').nth(courtColumn).getByText(endTime).click();
 
+  console.log('Submitting practice form');
   await page.getByText('Practice').click();
   await page.getByText('Next').click();
   await page.getByText(/I agree/i).click();
@@ -87,12 +100,7 @@ async function bookSlots({ page, startTime, endTime, uncheckConfirmationEmail })
  * await pause();
  * ```
  */
-function pause() {
-  console.log('Pausing');
-  return new Promise(() => {});
-}
-
-function delay(ms) {
-  console.log('Delaying', ms);
-  return new Promise(resolve => setTimeout(resolve, ms))
+function wait(ms) {
+  console.log('Waiting', ms ?? 'indefinitely');
+  return new Promise(ms ? resolve => setTimeout(resolve, ms) : () => {});
 }
