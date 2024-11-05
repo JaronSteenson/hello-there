@@ -66,7 +66,7 @@ async function bookSlots({ page, startTime, endTime, uncheckConfirmationEmail = 
   console.log('Booking slot', startTime, endTime);
   const courtColumn = process.env.BOOKING_COURT - 1;
 
-  const start = page.locator('.BookingGrid').last().locator('.BookingGrid-column').nth(courtColumn).getByText(startTime);
+  const start = page.locator('.BookingGrid').last().locator('.BookingGrid-column').nth(courtColumn).getByText(startTime).last();
   await start.scrollIntoViewIfNeeded();
   await start.click();
   console.log('Start time clicked', startTime);
@@ -75,7 +75,7 @@ async function bookSlots({ page, startTime, endTime, uncheckConfirmationEmail = 
     // I think back to back bookings in peak hits the total time limit and causes the booking form to open on start time click.
     console.log('Skipping end time click, single click booking');
   } else {
-    const end = page.locator('.BookingGrid').last().locator('.BookingGrid-column').nth(courtColumn).getByText(endTime);
+    const end = page.locator('.BookingGrid').last().locator('.BookingGrid-column').nth(courtColumn).getByText(endTime).last();
     await end.scrollIntoViewIfNeeded();
     await end.click();
     console.log('End time clicked', endTime);
