@@ -21,8 +21,8 @@ export default defineConfig({
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 6 : 0, // ~ Run takes about 20 seconds, have ~2 mins of goes at it.
-  timeout: 60 * 1000, // (Facebook auth and hello club is very slow).
+  retries: process.env.CI ? 3 : 0, // ~ Run takes about 20 seconds, have ~2 mins of goes at it.
+  timeout: 40_000, // (Facebook auth and hello club is very slow).
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
