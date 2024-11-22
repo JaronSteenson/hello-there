@@ -39,15 +39,15 @@ async function login({ page }) {
   await page.locator('[name=email], [name=text]').fill(process.env.HC_USERNAME);
   await page.getByPlaceholder('Password').fill(process.env.PASSWORD);
   await page.locator('[type=submit]').click();
-  await page.getByText(/Continue as/i).click();
+  await page.getByText(/Continue as/i).click({ timeout: 60_000 }); // Might have to wait for me to approve on my phone.
 }
 
 async function findBookingDay({ page }) {
   console.log('Finding booking day', process.env.BOOKING_DAY);
-  await page.getByText(/Bookings/i).first().click();
+  await page.getByText(/Bookings/i).first().click({ timeout: 45_000 }); // Super slow to load.
 
   // Click to the next day immediately so we don't try to book for today.
-  await page.locator('.BookingGridNav button').last().click(); // Next day button.
+  await page.locator('.BookingGridNav button').last().click({ timeout: 45_000 }); // Another slow loader.
 
   // Cycle through days, till the next instance of our booking day is found.
   let foundDay = false
