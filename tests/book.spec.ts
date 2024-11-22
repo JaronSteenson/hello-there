@@ -36,10 +36,10 @@ async function login({ page }) {
   await page.getByText(/Facebook/i).click();
 
   // As generic as possible, so work on all auth providers.
-  await page.locator('[name=email], [name=text]').fill(process.env.PASSWORD);
-  await page.getByPlaceholder('Password').fill(process.env.HC_USERNAME);
-  await page.screenshot();
+  await page.locator('[name=email], [name=text]').type(process.env.HC_USERNAME);
+  await page.getByPlaceholder('Password').type(process.env.PASSWORD);
   await page.locator('[type=submit]').click();
+  
   await page.getByText(/Continue as/i).click({ timeout: 30_000 }); // Might have to wait for me to approve on my phone.
 }
 
