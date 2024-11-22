@@ -27,14 +27,18 @@ test('book court', async ({ page }) => {
 });
 
 async function login({ page }) {
-  console.log('Logging into Facebook as', process.env.HC_USERNAME);
+  console.log(
+      'Logging into Facebook as',
+      process.env.HC_USERNAME,
+      Array.from({ length: process.env.PASSWORD.length }).fill('*').join('')
+  );
   await page.goto('');
   await page.getByText(/Facebook/i).click();
 
   // As generic as possible, so work on all auth providers.
-  await page.locator('[name=email], [name=text]').first().fill(process.env.HC_USERNAME);
-  await page.locator('[type=password]').first().fill(process.env.PASSWORD);
-  await page.locator('[type=submit]').first().click();
+  await page.locator('[name=email], [name=text]').fill(process.env.HC_USERNAME);
+  await page.getByPlaceholder('Password').fill(process.env.PASSWORD);
+  await page.locator('[type=submit]').click();
   await page.getByText(/Continue as/i).click();
 }
 
