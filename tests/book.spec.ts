@@ -27,18 +27,20 @@ test('book court', async ({ page }) => {
 });
 
 async function login({ page }) {
-  console.log('Logging in', process.env.USERNAME);
+  console.log('Logging into Facebook as', process.env.HC_USERNAME);
+  await page.goto('');
+  await page.getByText(/Facebook/i).click();
 
-  await page.goto('/login/credentials');
-  await page.getByPlaceholder('Username').fill(process.env.USERNAME);
-  await page.getByPlaceholder('Password').fill(process.env.PASSWORD);
-  await page.locator('[type=submit]').click();
-
-  await page.locator('[href="/bookings"]').last().click();
+  // As generic as possible, so work on all auth providers.
+  await page.locator('[name=email], [name=text]').first().fill(process.env.HC_USERNAME);
+  await page.locator('[type=password]').first().fill(process.env.PASSWORD);
+  await page.locator('[type=submit]').first().click();
+  await page.getByText(/Continue as/i).click();
 }
 
 async function findBookingDay({ page }) {
   console.log('Finding booking day', process.env.BOOKING_DAY);
+  await page.getByText(/Bookings/i).first().click();
 
   // Click to the next day immediately so we don't try to book for today.
   await page.locator('.BookingGridNav button').last().click(); // Next day button.

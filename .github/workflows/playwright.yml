@@ -5,11 +5,9 @@ on:
   pull_request:
     branches: [ master ]
   schedule:
-    # 18:00 Tuesday utc = 7:00am Wednesday, in Kaiwharawhara, Wellington
-    # These seem to run about 10-20 mins late on GitHub actions,
-    # so we are actually trying to hit 8am Wednesday execution,
-    # but having it scheduled 20 mins early.
-    - cron: "40/5 18 * * Tue"
+    # 18:59 Tuesday utc = 7:59am Wednesday, in Kaiwharawhara, Wellington
+    # Hopefully it's spun up and longed in bang on 8am (when you can go to the next weeks day).
+    - cron: "59 18 * * Tue"
 jobs:
   book-court:
     env:
