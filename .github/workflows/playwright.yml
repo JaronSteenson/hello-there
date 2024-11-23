@@ -2,17 +2,11 @@ name: Playwright Tests
 on:
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
-  schedule:
-    # 18:59 Tuesday utc = 7:59am Wednesday, in Kaiwharawhara, Wellington
-    # Hopefully it's spun up and longed in bang on 8am (when you can go to the next weeks day).
-    - cron: "59 18 * * Tue"
 jobs:
   book-court:
     env:
       PASSWORD: ${{ secrets.PASSWORD }}
-    timeout-minutes: 5
+    timeout-minutes: 2
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4

@@ -1,0 +1,1 @@
+0 8 * * Wed ~/code/hello-there/book.sh > ~/code/hello-there/log.txt 2>&1

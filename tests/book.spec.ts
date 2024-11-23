@@ -1,10 +1,24 @@
 import { test } from '@playwright/test';
+import { chromium } from 'playwright';
+
+const FIVE_MINUTES = 5000 * 60;
+
+test('launch chrome', async () => {
+  test.setTimeout(FIVE_MINUTES);
+  await launchBrowser();
+  await wait(FIVE_MINUTES);
+});
+
 
 /**
  * `0 12 * * 7` At 12:00 PM, only on Sunday.
  * Accounting for timezones and assuming we are running in utc, means 12am Monday night NZ time.
  */
-test('book court', async ({ page }) => {
+test('book court', async () => {
+  const page = await launchBrowser();
+  await page.goto('');
+
+  await wait(5000);
   await login({ page });
 
   await findBookingDay({ page });
@@ -26,20 +40,31 @@ test('book court', async ({ page }) => {
   });
 });
 
+async function launchBrowser() {
+  const browser = await chromium.launchPersistentContext('.context');
+  return await browser.newPage();
+}
+
 async function login({ page }) {
+  if (await page.getByText(/Bookings/i).first().isVisible()) {
+      console.log('Already logged in, skipping entire login flow');
+      return;
+  }
+
   console.log(
       'Logging into Facebook as',
       process.env.HC_USERNAME,
       Array.from({ length: process.env.PASSWORD.length }).fill('*').join('')
   );
 
-  await page.goto('');
   await page.getByText(/Facebook/i).click();
 
-  // As generic as possible, so work on all auth providers.
-  await page.locator('[name=email], [name=text]').type(process.env.HC_USERNAME);
-  await page.getByPlaceholder('Password').type(process.env.PASSWORD);
-  await page.locator('[name=login]').click();
+  if (await page.locator('[name=email], [name=text]').isVisible()) {
+      // As generic as possible, so work on all auth providers.
+      await page.locator('[name=email], [name=text]').type(process.env.HC_USERNAME);
+      await page.getByPlaceholder('Password').type(process.env.PASSWORD);
+      await page.locator('[name=login]').click();
+  }
 
   await page.getByText(/Continue as/i).click({ timeout: 30_000 }); // Might have to wait for me to approve on my phone.
 }
@@ -87,6 +112,11 @@ async function bookSlots({ page, startTime, endTime, uncheckConfirmationEmail = 
     await end.scrollIntoViewIfNeeded();
     await end.click();
     console.log('End time clicked', endTime);
+  }
+
+  if (!await page.getByText(/New Squash booking/i).isVisible()) {
+      console.log('Slot probably already booked');
+      throw new Error('Slot probably already booked');
   }
 
   console.log('Submitting practice form');
