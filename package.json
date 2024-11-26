@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "chrome": "npx playwright test --project chrome -g 'launch chrome'",
+    "chrome": "npx playwright test --project chrome -g 'launch chrome' --headed",
+    "test": "npx playwright test --project chrome -g 'book court' --headed ",
     "book": "npx playwright test --project chrome -g 'book court'"
   },
   "repository": {
