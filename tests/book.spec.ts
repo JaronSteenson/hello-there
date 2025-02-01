@@ -46,7 +46,7 @@ async function launchBrowser() {
 }
 
 async function login({ page }) {
-  if (await page.getByText(/Bookings/i).first().isVisible()) {
+  if (await page.getByText(/Welcome to Thorndon Club/i).first().isVisible()) {
       console.log('Already logged in, skipping entire login flow');
       return;
   }
