@@ -66,7 +66,7 @@ async function login({ page }) {
       await page.locator('[name=login]').click();
   }
 
-  await page.getByText(/Continue as/i).click({ timeout: 30_000 }); // Might have to wait for me to approve on my phone.
+  await page.getByText(/Continue as/i).click();
 }
 
 async function findBookingDay({ page }) {
