@@ -1,1 +1,8 @@
-0 8 * * Wed ~/code/hello-there/book.sh > ~/code/hello-there/log.txt 2>&1
+0 8 * * WED ~/code/hello-there/book.sh > ~/code/hello-there/log8txt 2>&1
+0 7 * * WED ~/code/hello-there/book.sh > ~/code/hello-there/log7txt 2>&1
+0 6 * * WED ~/code/hello-there/book.sh > ~/code/hello-there/log6txt 2>&1
+0 5 * * WED ~/code/hello-there/book.sh > ~/code/hello-there/log5txt 2>&1
+0 4 * * WED ~/code/hello-there/book.sh > ~/code/hello-there/log4txt 2>&1
+0 3 * * WED ~/code/hello-there/book.sh > ~/code/hello-there/log3txt 2>&1
+0 2 * * WED ~/code/hello-there/book.sh > ~/code/hello-there/log2txt 2>&1
+0 1 * * WED ~/code/hello-there/book.sh > ~/code/hello-there/log1txt 2>&1

@@ -6,4 +6,4 @@ cd ~/code/hello-there;
 export CI=true;
 
 nvm use 18;
-npm run book;
+npm run chrome;

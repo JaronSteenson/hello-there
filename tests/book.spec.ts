@@ -5,7 +5,8 @@ const FIVE_MINUTES = 5000 * 60;
 
 test('launch chrome', async () => {
   test.setTimeout(FIVE_MINUTES);
-  await launchBrowser();
+  const page = await launchBrowser();
+  await page.goto('');
   await wait(FIVE_MINUTES);
 });
 
